@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "d98507dfc339206c28357757cce851cc",
-    "content-hash": "af3dd2bdc19bbcf309f89f5e03d3b5bd",
+    "hash": "ae67e40f0e9029e0025a90762ab739d0",
+    "content-hash": "97834ce85cf2d6cbd942b38f8e7ec179",
     "packages": [
         {
             "name": "guzzlehttp/guzzle",
@@ -177,66 +177,6 @@
                 "uri"
             ],
             "time": "2016-06-24 23:00:38"
-        },
-        {
-            "name": "j0k3r/php-imgur-api-client",
-            "version": "3.0.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/j0k3r/php-imgur-api-client.git",
-                "reference": "23b68b47b06be1556067877075c1d322d0d0278e"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/j0k3r/php-imgur-api-client/zipball/23b68b47b06be1556067877075c1d322d0d0278e",
-                "reference": "23b68b47b06be1556067877075c1d322d0d0278e",
-                "shasum": ""
-            },
-            "require": {
-                "ext-curl": "*",
-                "guzzlehttp/guzzle": "^6.0",
-                "php": ">=5.5.0"
-            },
-            "replace": {
-                "adyg/php-imgur-api-client": "self.version"
-            },
-            "require-dev": {
-                "friendsofphp/php-cs-fixer": "~1.9"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "3.0.x-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Imgur\\": "lib/Imgur/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Adrian Ghiuta",
-                    "email": "adrian.ghiuta@gmail.com",
-                    "homepage": "http://adyg.github.com"
-                },
-                {
-                    "name": "Jeremy Benoist",
-                    "email": "jeremy.benoist@gmail.com",
-                    "homepage": "http://www.j0k3r.net"
-                }
-            ],
-            "description": "Imgur API v3 client",
-            "homepage": "https://github.com/j0k3r/php-imgur-api-client",
-            "keywords": [
-                "api",
-                "imgur"
-            ],
-            "time": "2016-11-04 13:13:21"
         },
         {
             "name": "psr/http-message",
