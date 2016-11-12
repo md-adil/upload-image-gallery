@@ -1,5 +1,8 @@
 <?php
 namespace App;
+
+use App\Adapters\AWS;
+
 /**
 * 
 */
@@ -15,12 +18,18 @@ class Upload
 
 	protected $clientId;
 	protected $uploadUrl = 'https://api.imgur.com/3/image.json';
-
+	protected $aws;
 	function __construct($client, $clientId = null, $clientSecret = null)
 	{
+
 		$this->client = $client;
 		$this->clientId = $clientId ?: getenv('CLIENT_ID');
 		$this->clientSecret = $clientSecret ?: getenv('CLIENT_ID');
+		$this->aws = new AWS([
+			'Key' => 'key',
+			'Secret' => 'secret',
+			'Bucket' => 'Bucket'
+		]) 
 	}
 
 	public function println() {
@@ -66,6 +75,20 @@ class Upload
 		if($res) {
 			return json_decode($res->getBody()->read(1024));
 		}
+	}
+
+	public function uploadToAWS($file) {
+		$company = '';
+		$ext = '';
+		$filename = '';
+		$location = sprintf('%s/%s/%s.%s',
+			$company,
+			date('Y/m'),
+			$filename,
+			$ext
+		);
+		
+		return $this->aws->store($file, $location);
 	}
 
 
