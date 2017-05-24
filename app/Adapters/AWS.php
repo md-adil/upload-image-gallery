@@ -1,4 +1,5 @@
 <?php
+namespace App\Adapters;
 use Aws\S3\S3Client;
 
 // Instantiate an Amazon S3 client.
@@ -25,8 +26,8 @@ class AWS
 		return $this->client->putObject([
 		    'Bucket' => $this->config['Bucket'],
 		    'Key' => $path,
-		    'Body' => fopen($file, 'r+'),
-		    'Content-Type' => $mime
+		    'Body' => file_get_contents($file),
+		    "ContentType" => $mime
 		]);
 		
 	}

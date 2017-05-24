@@ -17,19 +17,19 @@ class Upload
 	];
 
 	protected $clientId;
-	protected $uploadUrl = 'https://api.imgur.com/3/image.json';
 	protected $aws;
-	function __construct($client, $clientId = null, $clientSecret = null)
+	protected $pwd;
+	function __construct($config)
 	{
+		$this->aws = new AWS($config);
+		$this->pwd = $this->getPwd();
+	}
 
-		$this->client = $client;
-		$this->clientId = $clientId ?: getenv('CLIENT_ID');
-		$this->clientSecret = $clientSecret ?: getenv('CLIENT_ID');
-		$this->aws = new AWS([
-			'Key' => 'key',
-			'Secret' => 'secret',
-			'Bucket' => 'Bucket'
-		]) 
+	protected function getPwd() {
+		$pwd = getcwd();
+		$pwd = explode(DIRECTORY_SEPARATOR, $pwd);
+		$pwd = end($pwd);
+		return $pwd;
 	}
 
 	public function println() {
@@ -38,23 +38,22 @@ class Upload
 
 	public function upload($files = []) {
 		$this->createUploadsDir();
+		file_put_contents($this->upload_links, $this->pwd . "\t", FILE_APPEND);
 		if(!$files) {
 			$files = $this->findFiles();
 		}
+
 
 		$this->println("Total files to upload: ", count($files));
 
 		foreach ($files as $file) {
 			$this->println("Uploading: ", $file);
 			try {
-				$upload = $this->uploadToImgur($file);
-				if($upload && $upload->status == 200) {
-					$this->storeLink($upload->data->link, $file);
-					$this->println("Uploaded: ", $upload->data->link);
-					$this->moveFile($file);
-				} else {
-					$this->println("Something went wrong.");
-				}
+				$upload_link = $this->uploadToAWS($file);
+				$upload_link = $upload_link['ObjectURL'];
+				$this->storeLink($upload_link, $file);
+				$this->println("Uploaded: ", $upload_link);
+				$this->moveFile($file);
 			} catch (\Exception $e) {
 				$this->println("Error: ", $e->getMessage());
 			}
@@ -78,16 +77,18 @@ class Upload
 	}
 
 	public function uploadToAWS($file) {
-		$company = '';
-		$ext = '';
-		$filename = '';
+		$info = pathinfo($file);
+		$ext = $info['extension'];
+		$filename = $info['filename'];
+		$company = explode('_', $filename);
+		$company = $company[0];
+		$company = $this->str_slug($company);
 		$location = sprintf('%s/%s/%s.%s',
 			$company,
 			date('Y/m'),
-			$filename,
+			uniqid(),
 			$ext
 		);
-		
 		return $this->aws->store($file, $location);
 	}
 
@@ -109,8 +110,13 @@ class Upload
 	}
 
 	public function storeLink($link, $file) {
-		file_put_contents($this->upload_links, $link . PHP_EOL, FILE_APPEND);
+		file_put_contents($this->upload_links, $link . "\t", FILE_APPEND);
 		file_put_contents($this->upload_links_map, $link . ',' . $file . PHP_EOL, FILE_APPEND);
+	}
+
+	public function str_slug($name) {
+		$name = preg_replace('~[^\pL\d]+~u', '-', $name);
+		return strtolower($name);
 	}
 
 }
