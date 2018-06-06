@@ -1,1 +1,5 @@
 /vendor
+*test*
+/images
+/uploaded_files
+.upload-gallery
